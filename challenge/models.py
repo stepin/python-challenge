@@ -1,5 +1,8 @@
 import sqlalchemy as sa
 from sqlalchemy.ext.declarative import declarative_base
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
 
 
 class Base(object):
@@ -28,4 +31,3 @@ class Payment(Base):
     amount = sa.Column(sa.Float, nullable=False)
     patient_id = sa.Column(sa.Integer, sa.ForeignKey('patients.id'), nullable=False)
     external_id = sa.Column(sa.String)
-

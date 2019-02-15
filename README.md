@@ -19,6 +19,8 @@ All other fields in external source ***can change***, including payment amount!
 
 You can use flask/django or other framework of choice, just convert the models
 by yourself.
+You can modify the project structure as you like, the boilerplate code
+is provided only as an example.
 
 
 ## Required functionality
