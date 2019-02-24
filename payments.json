@@ -12,14 +12,14 @@
   "externalId": "503"
 },{
   "amount": 23.32,
-  "patientId": "6",
+  "patientId": "8",
   "externalId": "601"
 }, {
   "amount": 2.29,
-  "patientId": "6",
+  "patientId": "8",
   "externalId": "602"
 }, {
   "amount": 9.29,
-  "patientId": "8",
-  "externalId": "602"
+  "patientId": "15",
+  "externalId": "701"
 }]
