@@ -43,7 +43,8 @@ is provided only as an example.
     * Option 1. POST /patients and POST /payments methods
     * Option 2. Import json files from the command line
        
-3. Keep track of `created` and `updated` model fields. 
+3. `created` and `updated` model fields should be set appropriately to their names:
+ when the object was created and when it was updated last time. 
 
 
 ## Sample data
@@ -54,9 +55,11 @@ Sample data is provided in patients.json and payments.json files.
 ## Evaluation criteria
 
 * Code as you will code for a production use. You can omit some of the boring stuff 
- if you leave the comment that it should be there.
+ if you leave the comment that it should be there. 
  Make performance/reliability decisions as for production with 1000x more data/load. 
-* Challenge completion time is important, build the working version as fast as you can 
+* Challenge completion time is important, build the working version as fast as you can
+* To sum up 2 previous points: do not waste time on what is NOT in the task requirements,
+e.g. devops. 
 
 ## How to submit
 * Clone the repo or start a new one. Do not fork it!
