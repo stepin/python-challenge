@@ -14,6 +14,8 @@ break it with my questions.
 5. As specified in README.md no DevOps work will be done.
 6. Work will be done in the master branch for simplicity.
 7. No migrations for DB is created as its considered as new DB.
+8. I think that current files layout is ok but it's not scalable:
+if more files/code will be added to project it should be refactored.
 
 ### Assumptions
 
@@ -53,7 +55,8 @@ Binary RPC-based API proposed instead of REST API. Why?
 3. If a customer will want to implement integration by itself
 we will provide a client library for required language.
 4. Protobuf is quite old established technology.
-5. REST-style (CRUD style) API is not good if we work with a large number of records. Batch style (RPC style) API is better.
+5. REST-style (CRUD style) API is not good if we work with a large number of records.
+Batch style (RPC style) API is better.
 
 Some ideas on how to implement this in Python: https://github.com/keenbrowne/flask-pbj
 or https://github.com/ssola/python-flask-microservice
@@ -110,7 +113,8 @@ Another problem is technical: how to calculate records to delete
 when we have a lot of records in DB.
 
 Some ideas:
-1. Use individual table per batch and customer. In this case, we don't need to delete records at all (we create a new DB table
+1. Use individual table per batch and customer. In this case,
+we don't need to delete records at all (we create a new DB table
 for each batch). If we really think about stability it will
 be even better: we will not switch to this table if any errors
 will occur during data sync. This approach does not work well
@@ -119,7 +123,8 @@ some problems on how to integrate it with ORM.
 2. Use in-memory set structure inside IA to calculate the difference.
 Problem with this approach that it's possible to go out of memory.
 Also, we will have to get all existing IDs outside DB.
-For existing DB outside of DB: we can store some data from the previous sync to speed-up this process.
+For existing DB outside of DB: we can store some data
+from the previous sync to speed-up this process.
 3. Also, we can just delete not updated records by `updated` column.
 It's a quite unstable way but maybe it's ok if nothing critical
 will happen if we will randomly delete some records (they will

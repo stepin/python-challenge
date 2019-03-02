@@ -24,7 +24,7 @@ class Patient(Base):
     last_name = sa.Column(sa.String, nullable=False)
     middle_name = sa.Column(sa.String)
     date_of_birth = sa.Column(sa.Date)
-    external_id = sa.Column(sa.String, nullable=False, unique=True)
+    external_id = sa.Column(sa.String, nullable=False, index=True, unique=True)
     sync_id = sa.Column(GUID)
 
     def __repr__(self):
@@ -34,10 +34,10 @@ class Patient(Base):
 class Payment(Base):
     __tablename__ = 'payments'
 
-    amount = sa.Column(sa.Float, nullable=False)
+    amount = sa.Column(sa.Float, nullable=False, index=True)
     patient_id = sa.Column(sa.Integer, sa.ForeignKey('patients.id'), nullable=False)
     patient = db.relationship('Patient', backref=db.backref('payments', lazy=True))
-    external_id = sa.Column(sa.String, nullable=False, unique=True)
+    external_id = sa.Column(sa.String, nullable=False, index=True, unique=True)
     sync_id = sa.Column(GUID)
 
     def __repr__(self):

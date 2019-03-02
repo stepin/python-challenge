@@ -4,8 +4,11 @@ db_file = tempfile.NamedTemporaryFile()
 
 
 class Config(object):
+    # TODO: change this value
     SECRET_KEY = 'REPLACE ME'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    MAX_CONTENT_LENGTH = 1024 * 1024
+    WTF_CSRF_ENABLED = False
 
 
 class ProdConfig(Config):
