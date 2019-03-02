@@ -17,5 +17,20 @@ class GetPatientsSchema(Schema):
     total_amount = fields.Integer()
 
 
+class PostPaymentsSchema(Schema):
+    externalId = fields.String(attribute="external_id")
+    patientId = fields.Integer(attribute="patient_id")
+    amount = fields.Integer()
+
+
+class PostPatientsSchema(Schema):
+    externalId = fields.String(attribute="external_id")
+    firstName = fields.String(attribute="first_name")
+    lastName = fields.String(attribute="last_name")
+    dateOfBirth = fields.Date(attribute="date_of_birth")
+
+
 getPaymentsSchema = GetPaymentsSchema(many=True)
 getPatientsSchema = GetPatientsSchema(many=True)
+postPaymentsSchema = PostPaymentsSchema(many=True)
+postPatientsSchema = PostPatientsSchema(many=True)

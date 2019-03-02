@@ -3,7 +3,7 @@ import uuid
 from flask import Blueprint, jsonify, request
 from sqlalchemy.sql import func
 
-from challenge.json_schemas import getPaymentsSchema, getPatientsSchema
+from challenge.json_schemas import getPaymentsSchema, getPatientsSchema, postPaymentsSchema, postPatientsSchema
 from challenge.models import db, Patient
 from challenge.forms import GetPaymentsForm, GetPatientsForm
 from challenge.models import Payment
@@ -47,9 +47,10 @@ def patients_get():
     return str(patients_json)
 
 
-def _update_patients(content, sync_id):
+def _update_patients(json, sync_id):
     # TODO: implement
-    print(content, sync_id)
+    patients = postPatientsSchema.load(json)
+    print(patients, sync_id)
 
 
 def _delete_old_patients(sync_id):
@@ -61,7 +62,7 @@ def patients_post():
     sync_id = uuid.uuid4()
 
     _update_patients(content, sync_id)
-    _delete_old_patients(sync_id)
+    # _delete_old_patients(sync_id)
     db.session.commit()
 
     return jsonify({'status': 'OK'})
@@ -98,9 +99,10 @@ def payments_get():
     return payments_json
 
 
-def _update_payments(content, sync_id):
+def _update_payments(json, sync_id):
+    payments = postPaymentsSchema.load(json)
     #TODO
-    print(content, sync_id)
+    print(payments, sync_id)
 
 
 def _delete_old_payments(sync_id):
@@ -112,7 +114,7 @@ def payments_post():
     sync_id = uuid.uuid4()
 
     _update_payments(content, sync_id)
-    _delete_old_payments(sync_id)
+    # _delete_old_payments(sync_id)
     db.session.commit()
 
     return jsonify({'status': 'OK'})
