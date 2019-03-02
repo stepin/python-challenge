@@ -6,6 +6,7 @@ from flask_script import Manager, Server
 from flask_script.commands import ShowUrls, Clean
 from challenge import create_app
 from challenge import db
+from challenge.models import Base
 
 # default to dev config because no one should use this in
 # production anyway
@@ -33,7 +34,7 @@ def createdb():
         your SQLAlchemy models
     """
 
-    db.create_all()
+    Base.metadata.create_all(db.engine)
 
 
 if __name__ == "__main__":

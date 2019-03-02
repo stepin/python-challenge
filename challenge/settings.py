@@ -21,6 +21,7 @@ class DevConfig(Config):
     DEBUG_TB_INTERCEPT_REDIRECTS = False
 
     SQLALCHEMY_DATABASE_URI = 'sqlite:///../database.db'
+    SQLALCHEMY_ECHO = True
 
     CACHE_TYPE = 'null'
     ASSETS_DEBUG = True

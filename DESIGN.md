@@ -13,6 +13,7 @@ be questioned but today is weekend and I don't want to
 break it with my questions.
 5. As specified in README.md no DevOps work will be done.
 6. Work will be done in the master branch for simplicity.
+7. No migrations for DB is created as its considered as new DB.
 
 ### Assumptions
 
@@ -22,9 +23,8 @@ to use XML or CSV (partial parsers are available). Best
 transport for integration apps is DB (best data integrity).
 A queue is also good but most probably
 they don't check the structure of each record.
-3. Deletion is done with usage of `updated` column. Most
-probably it will work good enough even in production
-but it's always better to have this info explicitly.
+3. A lot of commits in git will be created. Its expected that for production
+it will be in feature branch and it will be merged as one commit.
 
 
 ## Real world design
