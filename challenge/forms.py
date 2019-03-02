@@ -3,7 +3,7 @@ from wtforms import StringField, ValidationError, IntegerField
 from wtforms.validators import Optional
 
 
-class GetPaymentsForm(Form):
+class GetPatientsForm(Form):
     payment_min = IntegerField('payment_min', validators=[Optional()])
     payment_max = IntegerField('payment_max', validators=[Optional()])
 
@@ -14,5 +14,5 @@ class GetPaymentsForm(Form):
             raise ValidationError('payment_max is less then payment_min.')
 
 
-class GetPatientsForm(Form):
+class GetPaymentsForm(Form):
     external_id = StringField('external_id')

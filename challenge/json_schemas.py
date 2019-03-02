@@ -14,6 +14,7 @@ class GetPatientsSchema(Schema):
     last_name = fields.String()
     middle_name = fields.String()
     date_of_birth = fields.Date()
+    total_amount = fields.Integer()
 
 
 getPaymentsSchema = GetPaymentsSchema(many=True)

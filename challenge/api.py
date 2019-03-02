@@ -1,12 +1,39 @@
 from flask import Blueprint, jsonify, request
-from functools import reduce
+from sqlalchemy.sql import func
 
-from challenge.json_schemas import getPaymentsSchema
-from challenge.models import db
+from challenge.json_schemas import getPaymentsSchema, getPatientsSchema
+from challenge.models import db, Patient
 from challenge.forms import GetPaymentsForm, GetPatientsForm
 from challenge.models import Payment
 
 api = Blueprint('api', __name__)
+
+
+def _sql_tuple_to_patients(patient_tuple):
+    patient = patient_tuple[0]
+    total_amount = patient_tuple[1]
+    patient.total_amount = total_amount
+    return patient
+
+
+def _get_patients(payment_min, payment_max):
+    stmt = db.session.query(
+        Payment.patient_id,
+        func.sum(Payment.amount).label('total_amount')
+    )
+    if payment_min:
+        stmt = stmt.filter(Payment.amount >= payment_min)
+    if payment_max:
+        stmt = stmt.filter(Payment.amount <= payment_max)
+    stmt = stmt.group_by(Payment.patient_id).subquery()
+
+    query = db.session.query(Patient, func.ifnull(stmt.c.total_amount, 0.0)). \
+        outerjoin(stmt, Patient.id == stmt.c.patient_id)
+
+    patients_tuple = query.all()
+    patients_list = map(_sql_tuple_to_patients, patients_tuple)
+    patients_json = getPatientsSchema.dump(patients_list)
+    return patients_json
 
 
 def patients_get():
@@ -14,8 +41,8 @@ def patients_get():
     if not form.validate():
         return f"Submitted params are invalid: {form.errors}", 422
 
-    # TODO: implement
-    return jsonify([])
+    patients_json = _get_patients(form.data["payment_min"], form.data["payment_max"])
+    return str(patients_json)
 
 
 def patients_post():
@@ -23,25 +50,26 @@ def patients_post():
     return jsonify({'status': 'OK'})
 
 
-def _get_payments(payment_min, payment_max):
+def _get_patient_id(patient_external_id):
+    patient = db.session.query(Patient) \
+        .filter(Patient.external_id == patient_external_id) \
+        .first()
+    if not patient:
+        return None
+    return patient.id
+
+
+def _get_payments(patient_external_id):
     query = db.session.query(Payment)
-    if payment_min:
-        query = query.filter(Payment.amount >= payment_min)
-    if payment_max:
-        query = query.filter(Payment.amount <= payment_max)
+    if patient_external_id:
+        patient_id = _get_patient_id(patient_external_id)
+        if not patient_id:
+            return jsonify([])
+        query = query.filter(Payment.patient_id == patient_id)
 
     payments_list = query.all()
     payments_json = getPaymentsSchema.dump(payments_list)
-
-    amount_total = reduce(
-        lambda x, y: x + y,
-        map(
-            lambda x: x.amount,
-            payments_list
-        ),
-        0)
-
-    return payments_json, amount_total
+    return str(payments_json)
 
 
 def payments_get():
@@ -49,8 +77,8 @@ def payments_get():
     if not form.validate():
         return f"Submitted params are invalid: {form.errors}", 422
 
-    payments_list, payments_sum = _get_payments(form.data["payment_min"], form.data["payment_max"])
-    return jsonify({"payments": payments_list, "sum": payments_sum})
+    payments_json = _get_payments(form.data["external_id"])
+    return payments_json
 
 
 def payments_post():
