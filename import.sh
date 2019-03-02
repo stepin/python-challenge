@@ -22,10 +22,10 @@ fi
 
 echo "Upload patients:"
 patients_url="${SERVER}/patients"
-curl -X POST -d "@${patients_json}" "${patients_url}"
+curl -X POST -H "Content-Type: application/json" -d "@${patients_json}" "${patients_url}"
 echo
 
 echo "Upload payments:"
 payments_url="${SERVER}/payments"
-curl -X POST -d "@${payments_json}" "${payments_url}"
+curl -X POST -H "Content-Type: application/json" -d "@${payments_json}" "${payments_url}"
 echo
