@@ -1,3 +1,5 @@
+import uuid
+
 from flask import Blueprint, jsonify, request
 from sqlalchemy.sql import func
 
@@ -45,8 +47,23 @@ def patients_get():
     return str(patients_json)
 
 
-def patients_post():
+def _update_patients(content, sync_id):
     # TODO: implement
+    print(content, sync_id)
+
+
+def _delete_old_patients(sync_id):
+    db.session.query(Patient).filter(Payment.sync_id != sync_id).delete(synchronize_session=False)
+
+
+def patients_post():
+    content = request.json
+    sync_id = uuid.uuid4()
+
+    _update_patients(content, sync_id)
+    _delete_old_patients(sync_id)
+    db.session.commit()
+
     return jsonify({'status': 'OK'})
 
 
@@ -81,8 +98,23 @@ def payments_get():
     return payments_json
 
 
+def _update_payments(content, sync_id):
+    #TODO
+    print(content, sync_id)
+
+
+def _delete_old_payments(sync_id):
+    db.session.query(Payment).filter(Payment.sync_id != sync_id).delete(synchronize_session=False)
+
+
 def payments_post():
-    # TODO: implement
+    content = request.json
+    sync_id = uuid.uuid4()
+
+    _update_payments(content, sync_id)
+    _delete_old_payments(sync_id)
+    db.session.commit()
+
     return jsonify({'status': 'OK'})
 
 
