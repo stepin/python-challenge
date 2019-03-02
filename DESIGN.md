@@ -27,6 +27,7 @@ A queue is also good but most probably
 they don't check the structure of each record.
 3. A lot of commits in git will be created. Its expected that for production
 it will be in feature branch and it will be merged as one commit.
+4. App will use SQLite always.
 
 
 ## Real world design

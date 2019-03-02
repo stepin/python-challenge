@@ -1,6 +1,10 @@
 from flask import Blueprint, jsonify, request
+from functools import reduce
 
+from challenge.json_schemas import getPaymentsSchema
+from challenge.models import db
 from challenge.forms import GetPaymentsForm, GetPatientsForm
+from challenge.models import Payment
 
 api = Blueprint('api', __name__)
 
@@ -20,8 +24,24 @@ def patients_post():
 
 
 def _get_payments(payment_min, payment_max):
-    # TODO: implement
-    return [{"min": payment_min, "max": payment_max}], 123
+    query = db.session.query(Payment)
+    if payment_min:
+        query = query.filter(Payment.amount >= payment_min)
+    if payment_max:
+        query = query.filter(Payment.amount <= payment_max)
+
+    payments_list = query.all()
+    payments_json = getPaymentsSchema.dump(payments_list)
+
+    amount_total = reduce(
+        lambda x, y: x + y,
+        map(
+            lambda x: x.amount,
+            payments_list
+        ),
+        0)
+
+    return payments_json, amount_total
 
 
 def payments_get():

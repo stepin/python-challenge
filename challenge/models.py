@@ -19,6 +19,7 @@ Base = declarative_base(cls=Base)
 
 class Patient(Base):
     __tablename__ = 'patients'
+    __table_args__ = {'sqlite_autoincrement': True}
 
     first_name = sa.Column(sa.String, nullable=False)
     last_name = sa.Column(sa.String, nullable=False)
@@ -33,6 +34,7 @@ class Patient(Base):
 
 class Payment(Base):
     __tablename__ = 'payments'
+    __table_args__ = {'sqlite_autoincrement': True}
 
     amount = sa.Column(sa.Float, nullable=False, index=True)
     patient_id = sa.Column(sa.Integer, sa.ForeignKey('patients.id'), nullable=False)
