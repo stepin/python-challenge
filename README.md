@@ -15,7 +15,7 @@ Feel free to extend and modify them, but do not delete existing fields.
 unique in the external source. It is the only field guaranteed not to change. 
 All other fields in external source ***can change***, including payment amount!
 
-#### Fameworks/ORMs
+#### Frameworks/ORMs
 
 You can use flask/django or other framework of choice, just convert the models
 by yourself.
