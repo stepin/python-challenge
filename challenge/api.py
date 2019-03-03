@@ -7,6 +7,7 @@ from challenge.json_schemas import getPaymentsSchema, getPatientsSchema, postPay
 from challenge.models import db, Patient
 from challenge.forms import GetPaymentsForm, GetPatientsForm
 from challenge.models import Payment
+from challenge.upsert import upsert_patients, upsert_payments
 
 api = Blueprint('api', __name__)
 
@@ -48,21 +49,20 @@ def patients_get():
 
 
 def _update_patients(json, sync_id):
-    # TODO: implement
     patients = postPatientsSchema.load(json)
-    print(patients, sync_id)
+    upsert_patients(patients, sync_id)
 
 
 def _delete_old_patients(sync_id):
-    db.session.query(Patient).filter(Payment.sync_id != sync_id).delete(synchronize_session=False)
+    db.session.query(Patient).filter(Patient.sync_id != sync_id).delete(synchronize_session=False)
 
 
 def patients_post():
     content = request.json
-    sync_id = uuid.uuid4()
+    sync_id = _create_sync_id()
 
     _update_patients(content, sync_id)
-    # _delete_old_patients(sync_id)
+    _delete_old_patients(sync_id)
     db.session.commit()
 
     return jsonify({'status': 'OK'})
@@ -101,20 +101,23 @@ def payments_get():
 
 def _update_payments(json, sync_id):
     payments = postPaymentsSchema.load(json)
-    #TODO
-    print(payments, sync_id)
+    upsert_payments(payments, sync_id)
 
 
 def _delete_old_payments(sync_id):
     db.session.query(Payment).filter(Payment.sync_id != sync_id).delete(synchronize_session=False)
 
 
+def _create_sync_id():
+    return uuid.uuid4().hex
+
+
 def payments_post():
     content = request.json
-    sync_id = uuid.uuid4()
+    sync_id = _create_sync_id()
 
     _update_payments(content, sync_id)
-    # _delete_old_payments(sync_id)
+    _delete_old_payments(sync_id)
     db.session.commit()
 
     return jsonify({'status': 'OK'})
