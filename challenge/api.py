@@ -45,7 +45,7 @@ def patients_get():
         return f"Submitted params are invalid: {form.errors}", 422
 
     patients_json = _get_patients(form.data["payment_min"], form.data["payment_max"])
-    return str(patients_json)
+    return jsonify(patients_json)
 
 
 def _update_patients(json, sync_id):
@@ -87,7 +87,7 @@ def _get_payments(patient_external_id):
 
     payments_list = query.all()
     payments_json = getPaymentsSchema.dump(payments_list)
-    return str(payments_json)
+    return jsonify(payments_json)
 
 
 def payments_get():
