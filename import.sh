@@ -18,6 +18,7 @@ if [[ -z "${patients_json}" ]] || [[ -z "${payments_json}" ]]; then
   echo "environment arguments:"
   echo "  SERVER                 URL to API (optional, default is ${SERVER_DEFAULT})"
   echo ""
+  exit 1
 fi
 
 echo "Upload patients:"
