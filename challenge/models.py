@@ -10,8 +10,8 @@ db = SQLAlchemy()
 class Base(object):
     __abstract__ = True
     id = sa.Column(sa.Integer, primary_key=True)
-    created = sa.Column(sa.DateTime, default=datetime.datetime.now, nullable=False)
-    updated = sa.Column(sa.DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now, nullable=False)
+    created = sa.Column(sa.DateTime, server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False)
+    updated = sa.Column(sa.DateTime, server_default=sa.text('CURRENT_TIMESTAMP'), onupdate=datetime.datetime.now, nullable=False)
 
 
 Base = declarative_base(cls=Base)
