@@ -4,7 +4,7 @@ from marshmallow import Schema, fields
 class GetPaymentsSchema(Schema):
     external_id = fields.String()
     patient_id = fields.Integer()
-    amount = fields.Integer()
+    amount = fields.Float()
 
 
 class GetPatientsSchema(Schema):
@@ -20,7 +20,7 @@ class GetPatientsSchema(Schema):
 class PostPaymentsSchema(Schema):
     externalId = fields.String(attribute="external_id")
     patientId = fields.Integer(attribute="patient_id")
-    amount = fields.Integer()
+    amount = fields.Float()
 
 
 class PostPatientsSchema(Schema):
